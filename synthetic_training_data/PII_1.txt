@@ -1,0 +1,41 @@
+[ORIGINAL]
+User: Alex Tan
+Email: alex.tan@example.test
+Phone: +65 9876 4321
+NRIC: S1234567A
+DOB: 1990-06-21
+Address: 22 Clementi Ave 3, Singapore 129907
+
+Payment issue reported.
+Card used: 4111 1111 1111 1111
+Expiry: 09/26
+CVV: 123
+
+Bank details provided for refund:
+Bank: DBS
+Account Number: 123-456789-0
+
+Note:
+“Please don’t store my card details in the ticket.”
+
+
+
+[REDACTED]
+User: ■■■■ ■■■
+Email: ■■■■.■■■@■■■■■■■.■■■■
+Phone: ■■■ ■■■■ ■■■■
+NRIC: ■■■■■■■■■
+DOB: ■■■■-■■-■■
+Address: ■■ ■■■■■■■ ■■■ ■, ■■■■■■■■■ ■■■■■■
+
+Payment issue reported.
+Card used: ■■■■ ■■■■ ■■■■ ■■■■
+Expiry: ■■/■■
+CVV: ■■■
+
+Bank details provided for refund:
+Bank: DBS
+Account Number: ■■■-■■■■■■■-■
+
+Note:
+“Please don’t store my card details in the ticket.”
