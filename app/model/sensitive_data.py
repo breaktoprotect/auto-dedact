@@ -44,35 +44,3 @@ class SensitiveData(BaseModel):
     domain: str = Field(..., description="e.g. PII, SECRETS, FINANCIAL")
     data_category: str = Field(..., description="e.g. NRIC, Credit Card PAN")
     location: SensitiveLocation = Field(..., discriminator="doc_type")
-
-
-# * Example usage
-if __name__ == "__main__":
-    sd = SensitiveData(
-        content="1234-5678-9012-3456",
-        domain="FINANCIAL",
-        data_category="Credit Card PAN",
-        location=XlsxLocation(
-            sheet="Sheet1",
-            row=10,
-            col=2,
-            cell="B10",
-        ),
-    )
-    print("doc_type:", sd.location.doc_type)
-    print(sd.model_dump())
-    print("---\n")
-
-    sd2 = SensitiveData(
-        content="S1234567D",
-        domain="PII",
-        data_category="NRIC",
-        location=TextLocation(
-            start_char=100,
-            end_char=109,
-            line=5,
-        ),
-    )
-    print("doc_type:", sd2.location.doc_type)
-    print(sd2.model_dump())
-    print("---\n")
