@@ -1,13 +1,17 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Optional
 import re
 
 
 class RegexRule(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     name: str = Field(..., description="Stable rule id, e.g. sg_nric")
     domain: str = Field(..., description="e.g. PII, SECRETS, FINANCIAL")
     data_category: str = Field(..., description="e.g. NRIC, CREDIT_CARD_PAN")
-    description: Optional[str] = None  # "Useful and brief description of the rule"
+    description: str = Field(
+        ..., description="Useful and brief description of the rule"
+    )
     pattern: str  # inline flags allowed, e.g. (?im)
 
     @field_validator("name", "domain", "data_category")

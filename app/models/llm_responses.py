@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from app.models.regex_rule import RegexRule
 
@@ -11,7 +11,9 @@ class LLMRegexSuggestion(BaseModel):
     We wrap RegexRule to avoid duplicating canonical fields.
     """
 
-    rule: RegexRule = Field(..., description="Suggested regex rule with metadata")
+    model_config = ConfigDict(extra="forbid")
+
+    rule: RegexRule
 
 
 class LLMJudgeResult(BaseModel):
@@ -23,11 +25,12 @@ class LLMJudgeResult(BaseModel):
       - if successful_redaction == False: suggested improved regex pattern
     """
 
+    model_config = ConfigDict(extra="forbid")
+
     successful_redaction: bool = Field(
         ..., description="True if redaction is successful"
     )
     reason: str = Field(..., description="Explanation of why it passed/failed")
-    regex_pattern: Optional[str] = Field(
-        default=None,
+    regex_pattern: str = Field(
         description='Improved regex pattern if unsuccessful; "N/A" if successful',
     )
