@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.model.regex_rule import RegexRule
+from app.models.regex_rule import RegexRule
 
 
 class LLMRegexSuggestion(BaseModel):
