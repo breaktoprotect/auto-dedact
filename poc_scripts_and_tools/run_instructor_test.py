@@ -1,6 +1,6 @@
 import instructor
 
-from app.model.llm_responses import LLMRegexSuggestion
+from app.models.llm_responses import LLMRegexSuggestion
 from app.llm.llm_client import get_instructor_client, get_client
 
 

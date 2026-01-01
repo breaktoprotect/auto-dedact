@@ -1,8 +1,8 @@
 from typing import Iterable
 import re
 
-from app.model.sensitive_data import SensitiveData
-from app.model.regex_rule import RegexRule
+from app.models.sensitive_data import SensitiveData
+from app.models.regex_rule import RegexRule
 
 
 def redact_text_by_content(
