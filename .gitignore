@@ -1,6 +1,8 @@
 # Sensitive
 .env
 
+# Not useful for commit
+logs/
 
 # Python-generated files
 __pycache__/
