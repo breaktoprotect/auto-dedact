@@ -9,7 +9,10 @@ dependencies = [
     "instructor>=1.13.0",
     "loguru>=0.7.3",
     "openai>=2.14.0",
+    "pgvector>=0.4.2",
+    "psycopg[binary]>=3.3.2",
     "python-dotenv>=1.2.1",
+    "sqlmodel>=0.0.31",
     "uvicorn>=0.40.0",
 ]
 
