@@ -5,7 +5,7 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(".env.local")
 
 
 def get_client(provider: str) -> OpenAI:
@@ -193,7 +193,7 @@ if __name__ == "__main__":
 
     # * Instructor single prompt test
     print("\n=== INSTRUCTOR SINGLE PROMPT ===")
-    from app.model.llm_responses import LLMRegexSuggestion
+    from app.models.llm_responses import LLMRegexSuggestion
 
     response = prompt_llm_instructor_single(
         provider=provider,

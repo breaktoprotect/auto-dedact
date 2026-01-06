@@ -1,0 +1,60 @@
+services:
+  embeddings:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+    command:
+      - --model-id
+      - sentence-transformers/all-mpnet-base-v2
+      - --pooling
+      - mean
+    ports:
+      - "8080:80"
+    volumes:
+      - hf_cache:/data
+    restart: unless-stopped
+
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      # POSTGRES_USER: app
+      # POSTGRES_PASSWORD: app
+      # POSTGRES_DB: auto_dedact
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/initdb:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+  db_init:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      PYTHONPATH: /app
+      # DATABASE_HOST: db
+      # DATABASE_PORT: 5432
+      # DATABASE_USERNAME: app
+      # DATABASE_PASSWORD: app
+      # DATABASE_NAME: auto_dedact
+      DATABASE_HOST: db
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+    depends_on:
+      - db
+    command:
+      [
+        "sh",
+        "-lc",
+        "pip install --no-cache-dir sqlmodel sqlalchemy psycopg[binary] pgvector python-dotenv && python docker/initdb/init_db.py"
+      ]
+    restart: "no"
+
+volumes:
+  hf_cache:
+  pgdata:
