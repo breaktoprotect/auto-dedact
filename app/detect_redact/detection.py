@@ -1,5 +1,5 @@
-from app.model.regex_rule import RegexRule
-from app.model.sensitive_data import SensitiveData, TextLocation
+from app.models.regex_rule import RegexRule
+from app.models.sensitive_data import SensitiveData, TextLocation
 from app.detect_redact.regex_utils import iter_regex_matches
 
 

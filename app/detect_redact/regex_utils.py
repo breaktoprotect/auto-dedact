@@ -1,6 +1,6 @@
 import re
 from typing import Iterable
-from app.model.regex_rule import RegexRule
+from app.models.regex_rule import RegexRule
 
 
 def iter_regex_matches(text: str, regex_rule: RegexRule) -> Iterable[re.Match]:
