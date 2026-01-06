@@ -2,6 +2,7 @@ from loguru import logger
 
 from app.logging_config import setup_logging
 from app.llm.workflows.self_learning import learn_single_sensitive_data
+from app.llm.workflows.pre_learning import verify_regex_coverage
 
 # TODO: temporary test cases for dev
 TEST_CASES = [
@@ -75,6 +76,19 @@ TEST_CASES = [
         "sensitive_value": "+65 9876 4321",
         "max_attempts": 10,
     },
+    {
+        "name": "Hard: AWS Secret Access Key leaked in app config + log line (training)",
+        "sample_text": (
+            "prod deploy notes:\n"
+            "AWS_ACCESS_KEY_ID=AKIA4MZQ9R2N7P3L8ABC\n"
+            "AWS_SECRET_ACCESS_KEY=Kx9mP3rFvY7ZL2dA0+qNwEJtS/6bC5H8U4R1ABCD\n"
+            "\n"
+            "cloud-init output:\n"
+            "[INFO] Loaded AWS credentials from environment.\n"
+        ),
+        "sensitive_value": "Kx9mP3rFvY7ZL2dA0+qNwEJtS/6bC5H8U4R1ABCD",
+        "max_attempts": 10,
+    },
 ]
 
 
@@ -84,6 +98,10 @@ def main() -> None:
     logger.info("Self-learning run started")
 
     for i, case in enumerate(TEST_CASES, start=1):
+        if verify_regex_coverage(
+            sample_text=case["sample_text"], sensitive_value=case["sensitive_value"]
+        ):
+            continue  # skip
 
         learn_single_sensitive_data(
             sample_text=case["sample_text"],

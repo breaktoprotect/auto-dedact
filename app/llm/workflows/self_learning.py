@@ -4,10 +4,11 @@ from app.models.llm_responses import LLMRegexSuggestion
 from app.detect_redact.redaction import redact_text_by_regex
 from app.llm.tasks.regex_suggest import suggest_regex_rule
 from app.llm.tasks.redaction_judge import judge_redaction_success
+from app.db.crud.regex_rule import create_rule
 
 LLM_PROVIDER = "openrouter"
-# LLM_MODEL = "google/gemini-3-flash-preview" # extremely smart
-LLM_MODEL = "openai/gpt-5.2"  # good balance of cost and performance
+# LLM_MODEL = "openai/gpt-5.2"  # extremely smart
+LLM_MODEL = "google/gemini-3-flash-preview"
 
 
 def learn_single_sensitive_data(
@@ -23,7 +24,7 @@ def learn_single_sensitive_data(
     while max_learning_attempts > 0 and not learning_is_successful:
         max_learning_attempts -= 1
         # * Suggest regex rule via LLM
-        suggested_rule: LLMRegexSuggestion = suggest_regex_rule(
+        suggestion: LLMRegexSuggestion = suggest_regex_rule(
             provider=LLM_PROVIDER,
             model=LLM_MODEL,
             sample_text=sample_text,
@@ -32,12 +33,12 @@ def learn_single_sensitive_data(
         )
 
         # debug
-        print("Suggested regex rule:", suggested_rule)
+        print("Suggested regex rule:", suggestion)
 
         # * Evaluate the suggested rule
         redacted_text = redact_text_by_regex(
             text=sample_text,
-            regex_rule=suggested_rule.rule,
+            regex_rule=suggestion.rule,
             token="",
             mask_char="■",
             same_length=True,
@@ -60,6 +61,14 @@ def learn_single_sensitive_data(
         print("-" * 40)
 
         if judge_result.successful_redaction:
+            create_rule(
+                name=suggestion.rule.name,
+                domain=suggestion.rule.domain,
+                data_category=suggestion.rule.data_category,
+                description=suggestion.rule.description,
+                pattern=suggestion.rule.pattern,
+                active=True,
+            )
             logger.bind(instance=f"Redaction of {sensitive_value}").success(
                 "Learning succeeded"
             )
